@@ -17,6 +17,7 @@
     <depends>com.intellij.modules.lang</depends>
     -->
 
+
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
     </extensions>
@@ -31,5 +32,12 @@
         <action id="messageAction" class="MessageAction" text="Message" description="Displays &quot;hello&quot;">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
+        <action id="PerformAnalysis" class="AnalysisAction" text="PerformAnalysis"
+                description="Analyse the class methods and generate report">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
     </actions>
+
+    <depends>com.intellij.modules.lang</depends>
+
 </idea-plugin>
