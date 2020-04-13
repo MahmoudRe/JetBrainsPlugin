@@ -1,12 +1,15 @@
 <idea-plugin>
     <id>com.your.company.my_gradle_plugin</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <name>Method inspector</name>
+    <vendor email="b.c.slager@student.tudelft.nl" url="https://github.com/MahmoudRe/JetBrainsPlugin">MahmoudRe</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    This plugin will analyze the methods in your class.<br>
     ]]></description>
+
+    <change-notes>Very first release of the plugin. It features basic method analysis</change-notes>
+
+    <version>1.0</version>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -23,6 +26,9 @@
                 text="Action Basics Plugin: Pop Dialog Action" description="SDK action example">
             <keyboard-shortcut first-keystroke="control alt A" second-keystroke="C" keymap="$default"/>
             <mouse-shortcut keystroke="control button3 doubleClick" keymap="$default"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="messageAction" class="MessageAction" text="Message" description="Displays &quot;hello&quot;">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
