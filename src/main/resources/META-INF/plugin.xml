@@ -11,23 +11,11 @@
 
     <version>1.0</version>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
-
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
     </extensions>
 
     <actions>
-        <action id="org.intellij.sdk.action.PopupDialogAction" class="PopupDialogAction"
-                text="Action Basics Plugin: Pop Dialog Action" description="SDK action example">
-            <keyboard-shortcut first-keystroke="control alt A" second-keystroke="C" keymap="$default"/>
-            <mouse-shortcut keystroke="control button3 doubleClick" keymap="$default"/>
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
-        </action>
         <action id="MethodInspector" class="MethodInspector" text="Method Inspector" description="Analyzes class methods">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
