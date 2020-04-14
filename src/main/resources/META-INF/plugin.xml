@@ -15,8 +15,14 @@
         <!-- Add your extensions here -->
     </extensions>
 
+    <depends>org.jetbrains.kotlin</depends>
+
     <actions>
         <action id="MethodInspector" class="MethodInspector" text="Method Inspector" description="Analyzes class methods">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="MethodInspectorK" class="MethodInspectorK" text="MethodInspectorK"
+                description="Method inspector for Kotlin files">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
