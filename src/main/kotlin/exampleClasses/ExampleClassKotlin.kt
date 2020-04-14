@@ -1,19 +1,20 @@
-package ExampleClasses;
+package exampleClasses
 
-public class ExampleClassFourMethods {
+/**
+ * This example class can be used for testing the plugin
+ */
+class ExampleClassKotlin {
     /**
      * Empty method with camel case naming
      */
-    public void thisMethodIsCamelCase() {
-
-    }
+    fun thisMethodIsCamelCase() {}
 
     /**
      * method with a simple return statement
      * @return always returns true.
      */
-    public boolean singleReturnStatement() {
-        return true;
+    fun singleReturnStatement(): Boolean {
+        return true
     }
 
     /**
@@ -21,12 +22,8 @@ public class ExampleClassFourMethods {
      * @param value Holds a simple boolean value to switch the return value.
      * @return simple return value to test different return statements.
      */
-    public boolean multipleReturnStatement(boolean value) {
-        if (value) {
-            return true;
-        } else  {
-            return false;
-        }
+    fun multipleReturnStatement(value: Boolean): Boolean {
+        return value
     }
 
     /**
@@ -35,12 +32,18 @@ public class ExampleClassFourMethods {
      * @param secondParam Holds a simple boolean value to switch the return value.
      * @return simple return value to test different return statements.
      */
-    public boolean multipleReturnStatementOverloading(boolean value, boolean secondParam) {
-        if (value && secondParam) {
-            return true;
-        } else  {
-            return false;
-        }
+    fun multipleReturnStatementOverloading(value: Boolean, secondParam: Boolean): Boolean {
+        return value && secondParam
     }
 
+    fun loopMethodWithoutDescription(numb: Int): Int {
+        // This methods features a while-loop and is missing JavaDoc.
+        var result = 0
+        var i = 0
+        while (i < numb) {
+            result += 1
+            i++
+        }
+        return result
+    }
 }
