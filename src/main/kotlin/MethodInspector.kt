@@ -31,19 +31,36 @@ class MethodInspector : AnAction() {
         //Iterate over the class methods
         file.accept(object : JavaRecursiveElementVisitor() {
 
-            fun getNumIfStatments(codeBlock: PsiCodeBlock): Int {
+            /**
+             * Get the number of all If-Statements inside a PsiCodeBlock,
+             * including the nested if-statements and else-if cases.
+             * This method iterates over all children inside the given
+             * psiCodeBlock and go to sub-children recursively looking for psiIfStatements
+             * @param PsiCodeBlock the psiCodeBlock to iterate inside
+             * @return The number of If-Statements
+             */
+            fun getNumIfStatments(psiCodeBlock: PsiCodeBlock): Int {
 
                 //first get the number of if-statements in this code block
-                val psiIfStatements = codeBlock.children.filterIsInstance<PsiIfStatement>()
+                val psiIfStatements = psiCodeBlock.children.filterIsInstance<PsiIfStatement>()
                 var res = psiIfStatements.size
 
                 //check inside each if-block if there is any nested if-statements or else-if
                 for(psiIfStatement in psiIfStatements) {
                     val ifBlocks = psiIfStatement.children.filterIsInstance<PsiBlockStatement>()
                     for (ifBlock in ifBlocks) {
-                        val children = ifBlock.children;
-                        val myCodeBlock = children.filterIsInstance<PsiCodeBlock>().first()
-                        res += getNumIfStatments(myCodeBlock)
+                        val myCodeBlock = ifBlock.children.filterIsInstance<PsiCodeBlock>()
+                        if(myCodeBlock.isNotEmpty())
+                            res += getNumIfStatments(myCodeBlock.first())
+                    }
+
+                    //check for else if case
+                    val elseIfBlocks = psiIfStatement.children.filterIsInstance<PsiIfStatement>()
+                    res += elseIfBlocks.size;
+                    for (elseIfBlock in elseIfBlocks) {
+                        val myCodeBlock = elseIfBlock.children.filterIsInstance<PsiCodeBlock>()
+                        if(myCodeBlock.isNotEmpty())
+                            res += getNumIfStatments(myCodeBlock.first())
                     }
                 }
 

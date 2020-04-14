@@ -69,4 +69,31 @@ public class ExampleClassFourMethods {
         }
     }
 
+    public int theCyclomaticComplexityIs5(int a, int b) {
+
+        int cc = 5;
+
+        if (a == b) {
+            if (b == cc)
+                return cc;
+            else if (b == 5)
+                return b;
+            else
+                return 5;
+        } else {
+            if(a == cc) {
+                return a;
+            } else {
+                if (b == cc)
+                    return cc;
+            }
+        }
+
+        if(a == 5)
+            return a;
+
+        return b;
+    }
 }
+
+
