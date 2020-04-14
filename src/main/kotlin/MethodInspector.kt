@@ -30,6 +30,26 @@ class MethodInspector : AnAction() {
 
         //Iterate over the class methods
         file.accept(object : JavaRecursiveElementVisitor() {
+
+            fun getNumIfStatments(codeBlock: PsiCodeBlock): Int {
+
+                //first get the number of if-statements in this code block
+                val psiIfStatements = codeBlock.children.filterIsInstance<PsiIfStatement>()
+                var res = psiIfStatements.size
+
+                //check inside each if-block if there is any nested if-statements or else-if
+                for(psiIfStatement in psiIfStatements) {
+                    val ifBlocks = psiIfStatement.children.filterIsInstance<PsiBlockStatement>()
+                    for (ifBlock in ifBlocks) {
+                        val children = ifBlock.children;
+                        val myCodeBlock = children.filterIsInstance<PsiCodeBlock>().first()
+                        res += getNumIfStatments(myCodeBlock)
+                    }
+                }
+
+                return res;
+            }
+
             override fun visitMethod(method: PsiMethod?) {
                 if (method != null) {
                     // Save the method name.
@@ -55,6 +75,12 @@ class MethodInspector : AnAction() {
                     val lines = method.text.split("\n").toTypedArray()
                     val linesCount = if (lines.size > 2) lines.size - 2 else 0
                     builder.append("   number of lines: $linesCount \n")
+
+                    builder.append("   NumCodeBlock: ${method.children.filterIsInstance<PsiCodeBlock>().size} \n")
+
+                    val mainPsiCodeBlock = method.children.filterIsInstance<PsiCodeBlock>().first()
+                    val cc = getNumIfStatments( mainPsiCodeBlock ) + 1
+                    builder.append("   Cyclomatic Complexity: $cc \n")
 
                     builder.append("\n \n")
                 }

@@ -43,4 +43,30 @@ public class ExampleClassFourMethods {
         }
     }
 
+    /**
+     * Dummy method to test the Cyclomatic Complexity
+     * @param a dummy param
+     * @param b dummy param
+     * @return not important
+     */
+    public int cyclomaticComplexityIs5(int a, int b) {
+        int cc = 5;
+
+        if (a == b) {
+            if (b == cc)
+                return cc;
+            else
+                return b;
+        } else {
+            if(a == cc) {
+                return a;
+            } else {
+                if (b == cc)
+                    return cc;
+                else
+                    return a;
+            }
+        }
+    }
+
 }
