@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.your.company.my_gradle_plugin</id>
-    <name>Method inspector</name>
+    <name>Method Inspector</name>
     <vendor email="b.c.slager@student.tudelft.nl" url="https://github.com/MahmoudRe/JetBrainsPlugin">MahmoudRe</vendor>
 
     <description><![CDATA[
@@ -18,7 +18,8 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <actions>
-        <action id="MethodInspector" class="MethodInspector" text="Method Inspector" description="Analyzes class methods">
+        <action id="MethodInspector" class="MethodInspector" text="Method Inspector" description="Analyzes class methods"
+        icon="AllIcons.Actions.Find" >
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
