@@ -1,6 +1,9 @@
-package ExampleClasses;
+package exampleClasses;
 
-public class ExampleClassFourMethods {
+/**
+ * This example class can be used for testing the plugin
+ */
+public class ExampleClassJava {
     /**
      * Empty method with camel case naming
      */
@@ -22,11 +25,7 @@ public class ExampleClassFourMethods {
      * @return simple return value to test different return statements.
      */
     public boolean multipleReturnStatement(boolean value) {
-        if (value) {
-            return true;
-        } else  {
-            return false;
-        }
+        return value;
     }
 
     /**
@@ -36,11 +35,7 @@ public class ExampleClassFourMethods {
      * @return simple return value to test different return statements.
      */
     public boolean multipleReturnStatementOverloading(boolean value, boolean secondParam) {
-        if (value && secondParam) {
-            return true;
-        } else  {
-            return false;
-        }
+        return value && secondParam;
     }
 
     /**
@@ -69,9 +64,9 @@ public class ExampleClassFourMethods {
         }
     }
 
-    public int theCyclomaticComplexityIs5(int a, int b) {
+    public int cyclomaticComplexityIs7(int a, int b) {
 
-        int cc = 5;
+        int cc = 7;
 
         if (a == b) {
             if (b == cc)
@@ -92,7 +87,18 @@ public class ExampleClassFourMethods {
         if(a == 5)
             return a;
 
-        return b;
+        return 5;
+    }
+
+    public int loopMethodWithoutDescription(int numb) {
+        // This methods features a while-loop and is missing JavaDoc.
+        int result = 0;
+        int i = 0;
+        while (i < numb) {
+            result +=1;
+            i++;
+        }
+        return result;
     }
 }
 
