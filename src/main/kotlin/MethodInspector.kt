@@ -47,7 +47,14 @@ class MethodInspector : AnAction() {
         }
 
         // Write the results to a file on disk.
-        writeResult(e, analysis, "report-${file.name.substringBeforeLast(".")}.md")
+        val succeeded = writeResult(e, analysis, "report-${file.name.substringBeforeLast(".")}.md")
+
+        if (succeeded) {
+            Messages.showMessageDialog(e.project, "Your report has been generated", "Method Inspector", Messages.getInformationIcon())
+        } else {
+        Messages.showMessageDialog(e.project, "A report for this class already exist", "Warning", Messages.getWarningIcon())
+        }
+
     }
 
     /**
@@ -131,9 +138,10 @@ class MethodInspector : AnAction() {
         return builder.toString()
     }
 
-    private fun writeResult(e : AnActionEvent, analysis : String, filename : String) {
+    private fun writeResult(e : AnActionEvent, analysis : String, filename : String) : Boolean {
         val factory = PsiFileFactory.getInstance(e.project)
         var result = factory.createFileFromText(filename, PlainTextLanguage.INSTANCE, analysis)
+        var succeeded = false
 
         // Write the generated file to disk. Duplicate reports are prohibited.
         val application : Application = ApplicationManager.getApplication()
@@ -141,12 +149,12 @@ class MethodInspector : AnAction() {
         application.runWriteAction(Runnable {
             try {
                 result = directory.add(result) as PsiFile
-                Messages.showMessageDialog(e.project, "Your report has been generated", "Method Inspector", Messages.getInformationIcon())
+                succeeded = true
             }
             catch (ex : Exception) {
-                Messages.showMessageDialog(e.project, "A report for this class already exist", "Warning", Messages.getWarningIcon())
             }
         })
+        return succeeded
     }
 
 }
