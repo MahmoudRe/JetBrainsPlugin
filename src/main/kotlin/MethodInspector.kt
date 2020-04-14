@@ -51,6 +51,11 @@ class MethodInspector : AnAction() {
                     val list = method.throwsList.text
                     if (list.isNotEmpty()) builder.append("   Throws: $list")
 
+                    //get the number of lines in this method
+                    val lines = method.text.split("\n").toTypedArray()
+                    val linesCount = if (lines.size > 2) lines.size - 2 else 0
+                    builder.append("   number of lines: $linesCount \n")
+
                     builder.append("\n \n")
                 }
             }
