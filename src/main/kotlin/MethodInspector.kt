@@ -27,18 +27,18 @@ class MethodInspector : AnAction() {
         // Create a PsiFile from the currently active class.
         val file = e.getData(LangDataKeys.PSI_FILE) ?: return
 
-        // Initialize the StringBuilder
-        val builder = StringBuilder("# Method Analyzer Report \n")
-        builder.append("## Class: ${file.name} \n-----\n \n")
+        // Initialize the file header.
+        val header ="# Method Inspector Report \n" +
+                            "## Class: ${file.name} \n-----\n \n"
 
         // Analyze the file
         val analysis : String
         analysis = when (file.language) {
             is KotlinLanguage -> {
-                inspectKotlinFile(builder, file)
+                inspectKotlinFile(header, file)
             }
             is JavaLanguage -> {
-                inspectJavaFile(builder, file)
+                inspectJavaFile(header, file)
             }
             else -> {
                 Messages.showMessageDialog(project, "The selected file is not compatible. Please select a Kotlin or Java file", "Method Inspector", Messages.getWarningIcon())
@@ -49,6 +49,7 @@ class MethodInspector : AnAction() {
         // Write the results to a file on disk.
         val succeeded = writeResult(e, analysis, "report-${file.name.substringBeforeLast(".")}.md")
 
+        // Return feedback to the user.
         if (succeeded) {
             Messages.showMessageDialog(e.project, "Your report has been generated", "Method Inspector", Messages.getInformationIcon())
         } else {
@@ -67,8 +68,12 @@ class MethodInspector : AnAction() {
 
     /**
      * Recursively walk the Psi tree to evaluate KtNamedFunctions.
+     * @param header The text that will be at the top of the report.
+     * @param file The Kotlin file that will be analyzed.
+     * @return The analysis, as a String.
      */
-    private fun inspectKotlinFile(builder: StringBuilder, file: PsiFile) : String {
+    private fun inspectKotlinFile(header : String, file: PsiFile) : String {
+        val builder = StringBuilder(header)
         //Iterate over the class methods
         file.accept(object : PsiRecursiveElementVisitor() {
             override fun visitElement(element: PsiElement) {
@@ -100,8 +105,12 @@ class MethodInspector : AnAction() {
 
     /**
      * Recursively walk the Psi tree to evaluate Java methods.
+     * @param header The text that will be at the top of the report.
+     * @param file The Java file that will be analyzed.
+     * @return The analysis, as a String.
      */
-    private fun inspectJavaFile(builder: StringBuilder, file: PsiFile): String {
+    private fun inspectJavaFile(header : String, file: PsiFile): String {
+        val builder = StringBuilder(header)
         //Iterate over the class methods
         file.accept(object : JavaRecursiveElementVisitor() {
             override fun visitMethod(method: PsiMethod?) {
@@ -138,20 +147,27 @@ class MethodInspector : AnAction() {
         return builder.toString()
     }
 
+    /**
+     * Write the generated file to disk. Duplicate reports are prohibited.
+     * @param e The ActionEvent of this current Action.
+     * @param analysis The result of analyzing the file.
+     * @param filename The analysis will be saved under this name.
+     * @return Indicates whether the action succeeded.
+     */
     private fun writeResult(e : AnActionEvent, analysis : String, filename : String) : Boolean {
         val factory = PsiFileFactory.getInstance(e.project)
         var result = factory.createFileFromText(filename, PlainTextLanguage.INSTANCE, analysis)
         var succeeded = false
 
-        // Write the generated file to disk. Duplicate reports are prohibited.
         val application : Application = ApplicationManager.getApplication()
-        val directory : PsiDirectory = LangDataKeys.IDE_VIEW.getData(e.getDataContext())!!.getOrChooseDirectory()!!
+        val directory : PsiDirectory = LangDataKeys.IDE_VIEW.getData(e.dataContext)!!.orChooseDirectory!!
         application.runWriteAction(Runnable {
             try {
                 result = directory.add(result) as PsiFile
                 succeeded = true
             }
             catch (ex : Exception) {
+                print("A file with this name already exists. A pop-up warning will now appear to the user.")
             }
         })
         return succeeded
