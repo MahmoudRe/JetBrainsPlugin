@@ -4,28 +4,42 @@ import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.psi.*
+import java.io.File
 
 
 /**
  * This Action creates a message dialog.
  */
-class MessageAction : AnAction() {
+class MethodInspector : AnAction() {
 
     /**
      * Displays a message dialog.
      */
     override fun actionPerformed(e: AnActionEvent) {
 
-        Messages.showMessageDialog(e.project, "Hello!", "Message dialog", Messages.getInformationIcon())
+        print("Reading file \n \n")
 
         val file : PsiFile = PsiDocumentManager.getInstance(e.project!!).getPsiFile(e.getData(LangDataKeys.EDITOR)?.document!!)!!
 
         file.accept(object : JavaRecursiveElementVisitor() {
             override fun visitMethod(method: PsiMethod?) {
-                super.visitMethod(method)
-                print(method.toString())
+                //super.visitMethod(method)
+                if (method != null) {
+                    File("report.txt").writeText(method.name + "/n")
+                    print("Method " + method.name + ": ")
+                    val returnType = method.returnType
+                    if (returnType == null) print ("(constructor) \n") else {
+                        print("\n   Return type: " + returnType.getPresentableText(true) + "\n") }
+                    print("   Parameter list: " + method.parameterList.text + "\n")
+                    val list = method.throwsList.text
+                    if (list.isNotEmpty()) print("   Throws: $list")
+                    print("\n \n")
+                }
             }
         })
+
+        Messages.showMessageDialog(e.project, "Your report is being generated!", "Method Inspector", Messages.getInformationIcon())
+
     }
 
     /**
