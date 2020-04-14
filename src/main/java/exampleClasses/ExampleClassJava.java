@@ -1,15 +1,22 @@
-class ExampleClassFourMethodsK {
+package exampleClasses;
+
+/**
+ * This example class can be used for testing the plugin
+ */
+public class ExampleClassJava {
     /**
      * Empty method with camel case naming
      */
-    fun thisMethodIsCamelCase() {}
+    public void thisMethodIsCamelCase() {
+
+    }
 
     /**
      * method with a simple return statement
      * @return always returns true.
      */
-    fun singleReturnStatement(): Boolean {
-        return true
+    public boolean singleReturnStatement() {
+        return true;
     }
 
     /**
@@ -17,8 +24,8 @@ class ExampleClassFourMethodsK {
      * @param value Holds a simple boolean value to switch the return value.
      * @return simple return value to test different return statements.
      */
-    fun multipleReturnStatement(value: Boolean): Boolean {
-        return value
+    public boolean multipleReturnStatement(boolean value) {
+        return value;
     }
 
     /**
@@ -27,7 +34,18 @@ class ExampleClassFourMethodsK {
      * @param secondParam Holds a simple boolean value to switch the return value.
      * @return simple return value to test different return statements.
      */
-    fun multipleReturnStatementOverloading(value: Boolean, secondParam: Boolean): Boolean {
-        return value && secondParam
+    public boolean multipleReturnStatementOverloading(boolean value, boolean secondParam) {
+        return value && secondParam;
+    }
+
+    public int loopMethodWithoutDescription(int numb) {
+        // This methods features a while-loop and is missing JavaDoc.
+        int result = 0;
+        int i = 0;
+        while (i < numb) {
+            result +=1;
+            i++;
+        }
+        return result;
     }
 }
