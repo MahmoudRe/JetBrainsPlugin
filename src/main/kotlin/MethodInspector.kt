@@ -113,6 +113,43 @@ class MethodInspector : AnAction() {
         val builder = StringBuilder(header)
         //Iterate over the class methods
         file.accept(object : JavaRecursiveElementVisitor() {
+
+            /**
+             * Recursively iterates over all children of PsiCodeBlock, 
+             * and count the number of Decision Points.
+             * The considered DP are if-, for- and while-condition.
+             * @param psiCodeBlock the psiCodeBlock to start with
+             * @return The number of If-Statements
+             */
+            fun countDecisionPoints(psiElement: PsiElement): Int {
+
+                //first get the number of if-statements in this code block
+                val psiDecisionPoints = psiElement.children
+                                                .filter{ it is PsiIfStatement
+                                                        || it is PsiWhileStatement
+                                                        || it is PsiForStatement }
+                var res = psiDecisionPoints.size
+
+                //recursively add the number of Decision Points in each child
+                for(psiDP in psiDecisionPoints) {
+
+                    //iterate over all psiBlockStatements, there can be multiple of them
+                    val psiBlockStatements = psiDP.children.filterIsInstance<PsiBlockStatement>()
+                    for (psiBlockStatement in psiBlockStatements) {
+                        
+                        //there is only one CodeBlock inside PsiBlockStatement
+                        val block = psiBlockStatement.children.filterIsInstance<PsiCodeBlock>()
+                        if(block.isNotEmpty())
+                            res += countDecisionPoints(block.first())
+                    }
+
+                    //check for direct children without block brackets
+                    res += countDecisionPoints(psiDP)
+                }
+
+                return res;
+            }
+
             override fun visitMethod(method: PsiMethod?) {
                 if (method != null) {
                     // Save the method name.
@@ -139,6 +176,11 @@ class MethodInspector : AnAction() {
                     val lines = method.text.split("\n").toTypedArray()
                     val linesCount = if (lines.size > 2) lines.size - 2 else 0
                     builder.append("   number of lines: $linesCount \n")
+
+                    //calculate the Cyclomatic Complexity
+                    val mainPsiCodeBlock = method.children.filterIsInstance<PsiCodeBlock>().first()
+                    val cc = countDecisionPoints( mainPsiCodeBlock ) + 1
+                    builder.append("   Cyclomatic Complexity: $cc \n")
 
                     builder.append("\n \n")
                 }
