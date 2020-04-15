@@ -11,10 +11,10 @@ The plugin is written in Kotlin and supports both Kotlin and Java.
 #Reports
 Report generated for a Kotlin file will be shown as the example below.
 ```
-# Method Analyzer Report 
+# Method Inspector Report 
 ## Class: Test.kt 
 -----
-     
+ 
 ### Method main: 
 Parameters: [args]  
 Number of lines: 2 
@@ -23,14 +23,15 @@ Has method description: false
 
 Report generated for a Java file will be shown as the example below.
 ```
-# Method Analyzer Report 
+# Method Inspector Report 
 ## Class: Main.java 
 -----
  
 ### Method main: 
    Return type: void
    Parameter list: (String[] args) 
-   number of lines: 1 
+   number of lines: 6 
+   Cyclomatic Complexity: 2 
 ```
 
 #Authors
