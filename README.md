@@ -2,13 +2,13 @@
 The project provides a basic Jetbrains plugin which wil give a set of metrics for a specified file. 
 The plugin is written in Kotlin and supports both Kotlin and Java.
 
-#How it works
+## How it works
 1. Navigate to the file that you want to see the metrics of.
 2. Select "Tools" > "MethodInspector"
 3. A pop-up will display that the plugin is working as expected and is generating a report.
 4. The report will be saved in the same directory as the Java/Kotlin file.
 
-#Reports
+## Reports
 Report generated for a Kotlin file will be shown as the example below.
 ```
 # Method Inspector Report 
@@ -16,9 +16,9 @@ Report generated for a Kotlin file will be shown as the example below.
 -----
  
 ### Method main: 
-Parameters: [args]  
-Number of lines: 2 
-Has method description: false 
+    Parameters: [args]  
+    Number of lines: 2 
+    Has method description: false 
 ```
 
 Report generated for a Java file will be shown as the example below.
@@ -30,18 +30,19 @@ Report generated for a Java file will be shown as the example below.
 ### Method main: 
    Return type: void
    Parameter list: (String[] args) 
-   number of lines: 6 
+   Number of lines: 6 
    Cyclomatic Complexity: 2 
 ```
 
-#Authors
+## Authors
+
 
 |Mahmoud Alhumsi Alrefaai | Jason Bloom  |
 |-------------------------|--------------|
-|Cheyenne Slager          | Sheeraz Zadi |    
+|Cheyenne Slager          | Sheeraz Zadi |  
 
 
-#Resources
+## Resources
 The following resources will provide information needed in this project:
 
 * IntelliJ Platform SDK docs: https://www.jetbrains.org/intellij/sdk/docs/intro/welcome.html
