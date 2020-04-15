@@ -85,13 +85,13 @@ class MethodInspector : AnAction() {
 
                     // Save the parameters names (when applicable).
                     if (element.valueParameters.size > 0) {
-                        builder.append("Parameters: ${element.valueParameters.map{x -> x.name}}  \n")}
+                        builder.append("   Parameters: ${element.valueParameters.map{x -> x.name}}  \n")}
 
                     // Count the number of lines.
-                    builder.append("Number of lines: ${element.getLineCount()} \n")
+                    builder.append("   Number of lines: ${element.getLineCount()} \n")
 
                     // Check if the method has a JavDoc description.
-                    builder.append("Has method description: ${element.docComment != null} \n")
+                    builder.append("   Has method description: ${element.docComment != null} \n")
 
 
                     builder.append("\n \n")
@@ -175,7 +175,7 @@ class MethodInspector : AnAction() {
                     //get the number of lines in this method
                     val lines = method.text.split("\n").toTypedArray()
                     val linesCount = if (lines.size > 2) lines.size - 2 else 0
-                    builder.append("   number of lines: $linesCount \n")
+                    builder.append("   Number of lines: $linesCount \n")
 
                     //calculate the Cyclomatic Complexity
                     val mainPsiCodeBlock = method.children.filterIsInstance<PsiCodeBlock>().first()
