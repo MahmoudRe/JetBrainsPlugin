@@ -115,36 +115,36 @@ class MethodInspector : AnAction() {
         file.accept(object : JavaRecursiveElementVisitor() {
 
             /**
-             * Get the number of all If-Statements inside a PsiCodeBlock,
-             * including the nested if-statements and else-if cases.
-             * This method iterates over all children inside the given
-             * psiCodeBlock and go to sub-children recursively looking for psiIfStatements
-             * @param PsiCodeBlock the psiCodeBlock to iterate inside
+             * Recursively iterates over all children of PsiCodeBlock, 
+             * and count the number of Decision Points.
+             * The considered DP are if-, for- and while-condition.
+             * @param psiCodeBlock the psiCodeBlock to start with
              * @return The number of If-Statements
              */
-            fun getNumIfStatments(psiCodeBlock: PsiCodeBlock): Int {
+            fun countDecisionPoints(psiElement: PsiElement): Int {
 
                 //first get the number of if-statements in this code block
-                val psiIfStatements = psiCodeBlock.children.filterIsInstance<PsiIfStatement>()
-                var res = psiIfStatements.size
+                val psiDecisionPoints = psiElement.children
+                                                .filter{ it is PsiIfStatement
+                                                        || it is PsiWhileStatement
+                                                        || it is PsiForStatement }
+                var res = psiDecisionPoints.size
 
-                //check inside each if-block if there is any nested if-statements or else-if
-                for(psiIfStatement in psiIfStatements) {
-                    val ifBlocks = psiIfStatement.children.filterIsInstance<PsiBlockStatement>()
-                    for (ifBlock in ifBlocks) {
-                        val myCodeBlock = ifBlock.children.filterIsInstance<PsiCodeBlock>()
-                        if(myCodeBlock.isNotEmpty())
-                            res += getNumIfStatments(myCodeBlock.first())
+                //recursively add the number of Decision Points in each child
+                for(psiDP in psiDecisionPoints) {
+
+                    //iterate over all psiBlockStatements, there can be multiple of them
+                    val psiBlockStatements = psiDP.children.filterIsInstance<PsiBlockStatement>()
+                    for (psiBlockStatement in psiBlockStatements) {
+                        
+                        //there is only one CodeBlock inside PsiBlockStatement
+                        val block = psiBlockStatement.children.filterIsInstance<PsiCodeBlock>()
+                        if(block.isNotEmpty())
+                            res += countDecisionPoints(block.first())
                     }
 
-                    //check for else if case
-                    val elseIfBlocks = psiIfStatement.children.filterIsInstance<PsiIfStatement>()
-                    res += elseIfBlocks.size;
-                    for (elseIfBlock in elseIfBlocks) {
-                        val myCodeBlock = elseIfBlock.children.filterIsInstance<PsiCodeBlock>()
-                        if(myCodeBlock.isNotEmpty())
-                            res += getNumIfStatments(myCodeBlock.first())
-                    }
+                    //check for direct children without block brackets
+                    res += countDecisionPoints(psiDP)
                 }
 
                 return res;
@@ -177,10 +177,9 @@ class MethodInspector : AnAction() {
                     val linesCount = if (lines.size > 2) lines.size - 2 else 0
                     builder.append("   number of lines: $linesCount \n")
 
-                    builder.append("   NumCodeBlock: ${method.children.filterIsInstance<PsiCodeBlock>().size} \n")
-
+                    //calculate the Cyclomatic Complexity
                     val mainPsiCodeBlock = method.children.filterIsInstance<PsiCodeBlock>().first()
-                    val cc = getNumIfStatments( mainPsiCodeBlock ) + 1
+                    val cc = countDecisionPoints( mainPsiCodeBlock ) + 1
                     builder.append("   Cyclomatic Complexity: $cc \n")
 
                     builder.append("\n \n")

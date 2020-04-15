@@ -39,7 +39,8 @@ public class ExampleClassJava {
     }
 
     /**
-     * Dummy method to test the Cyclomatic Complexity
+     * Dummy method to test the Cyclomatic Complexity.
+     * The CC of this method should be 5.
      * @param a dummy param
      * @param b dummy param
      * @return not important
@@ -64,8 +65,14 @@ public class ExampleClassJava {
         }
     }
 
+    /**
+     * Dummy method to test the Cyclomatic Complexity.
+     * The CC of this method should be 7.
+     * @param a dummy param
+     * @param b dummy param
+     * @return not important
+     */
     public int cyclomaticComplexityIs7(int a, int b) {
-
         int cc = 7;
 
         if (a == b) {
@@ -86,6 +93,50 @@ public class ExampleClassJava {
 
         if(a == 5)
             return a;
+
+        return 5;
+    }
+
+    /**
+     * Dummy method to test the Cyclomatic Complexity
+     * with {for} and {while} loops as Decision Points.
+     * The CC of this method should be 7.
+     * @param a dummy param
+     * @param b dummy param
+     * @return not important
+     */
+    public int cyclomaticComplexityTest(int a, int b) {
+        int cc = 7;
+
+        if (a == b) {                           //--> 1
+
+            while (a > b)                       //--> 2
+                for(int i = 0; a > b; i++)      //--> 3
+                    if (a > Integer.MIN_VALUE)  //--> 4
+                        a--;
+
+
+        } else if (a == 5) {                    //--> 5
+
+            if(a != cc) {                       //--> 6
+                return a;
+            } else {
+
+                for(int i = 0; i < b; i++) {    //--> 7
+                    if(i != 0) {                //--> 8
+                        b--;
+                    }
+
+                    while (i < 0)               //--> 9
+                        i++;
+                }
+            }
+        }
+
+        if (b == cc) {                          //--> 10
+            return a;
+        }
+
 
         return 5;
     }
